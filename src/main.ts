@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-03 13:21:56
+ * @LastEditTime: 2023-05-11 10:47:01
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -16,11 +16,12 @@ async function bootstrap() {
     // 配置swagger接口文档
     const options = new DocumentBuilder()
         .setTitle('chenyx-file-server')
-        .setDescription('文件上传接口')
+        .setDescription('chenyx-file-server-api')
         .setVersion('1')
+        .setExternalDoc('api-json数据','http://localhost:7171/api-doc-json')
         .build();
-    const swagger = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('/api-doc', app, swagger);
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('/api-doc', app, document);
 
     //静态资源访问
     app.useStaticAssets('static', { prefix: '/static' });

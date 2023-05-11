@@ -25,6 +25,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/throttler": "^4.0.0",
+    "@nestjs/typeorm": "^9.0.1",
     "@prisma/client": "^4.13.0",
     "argon2": "^0.30.3",
     "class-transformer": "^0.5.1",
@@ -36,9 +37,11 @@
     "mockjs": "^1.1.0",
     "multer": "1.4.5-lts.1",
     "multiparty": "^4.2.3",
+    "mysql2": "^3.2.4",
     "prisma-binding": "^2.3.16",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.3.15"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
