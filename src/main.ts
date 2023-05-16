@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-11 10:47:01
+ * @LastEditTime: 2023-05-16 10:53:59
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -18,7 +18,7 @@ async function bootstrap() {
         .setTitle('chenyx-file-server')
         .setDescription('chenyx-file-server-api')
         .setVersion('1')
-        .setExternalDoc('api-json数据','http://localhost:7171/api-doc-json')
+        .setExternalDoc('api-json','http://localhost:7171/api-doc-json')
         .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('/api-doc', app, document);
