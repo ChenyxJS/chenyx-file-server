@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 16:55:40
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-05 21:47:49
+ * @LastEditTime: 2023-05-21 21:05:26
  * @FilePath: /chenyx-file-server/src/common/common.module.ts
  */
 
@@ -10,9 +10,18 @@ import { Global, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import fse = require('fs-extra');
+import { JwtModule } from '@nestjs/jwt';
+import { WxLoginController } from './WxLogin.controller';
+import { configController } from './config.controller';
 
-// 上传配置
-const upload = MulterModule.registerAsync({
+import { WxUtils } from './utils/WxUtils';
+import { HttpModule } from '@nestjs/axios';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserOpenId } from './entities/UserOpenId.entity';
+import { User } from 'src/user/entities/user.entity';
+
+// 分片上传配置
+const simpleChunkUpload = MulterModule.registerAsync({
     useFactory() {
         return {
             storage: diskStorage({
@@ -39,10 +48,45 @@ const upload = MulterModule.registerAsync({
     }
 });
 
+// 分片上传配置
+const simpleUpload = MulterModule.registerAsync({
+    useFactory() {
+        return {
+            storage: diskStorage({
+                //文件储存位置
+                destination: (_, file, callback) => {
+                    // 先将分片文件保存在临时目录中
+                    const fext = file.originalname.split('.')[1];
+                    const uploadDir = `static/${fext}`;
+                    // 判断该文件夹是否存在
+                    if (!fse.existsSync(uploadDir)) {
+                        // 不存在则创建改目录
+                        fse.mkdirsSync(uploadDir);
+                    }
+                    // 回调返回临时目录
+                    callback(null, uploadDir);
+                },
+                //文件名定制
+                filename: (_, file, callback) => {
+                    const path = file.originalname;
+                    callback(null, path);
+                }
+            })
+        };
+    }
+});
+
 @Global()
 @Module({
-    imports: [upload],
-    controllers: [],
-    exports: [upload]
+    imports: [
+        TypeOrmModule.forFeature([User, UserOpenId]),
+        HttpModule,
+        JwtModule,
+        simpleChunkUpload,
+        simpleUpload
+    ],
+    controllers: [WxLoginController, configController],
+    providers: [WxUtils],
+    exports: [simpleChunkUpload, simpleUpload]
 })
 export class CommonModule {}

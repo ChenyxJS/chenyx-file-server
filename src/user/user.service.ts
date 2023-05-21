@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JsonResult } from 'src/common/entities/JsonResult.entity';
+import { UserQuery } from './query/user.query';
 
 @Injectable()
 export class UserService {
@@ -14,37 +15,47 @@ export class UserService {
 
     async create(createUserDto: CreateUserDto) {
         const jsonResult = new JsonResult<CreateUserDto>();
-        await this.UserMapper.save(createUserDto).then(result => {
-            jsonResult.buildTureObject(result);
+        const result = await this.UserMapper.save(createUserDto);
+        jsonResult.buildTureObject(result);
+        return jsonResult;
+    }
+
+    async findPage(query: UserQuery) {
+        const jsonResult = new JsonResult();
+        const result = await this.UserMapper.findAndCount({
+            skip: (query.page - 1) * query.limit,
+            take: query.limit
         });
+        jsonResult.buildTrueList(result[0], result[1]);
         return jsonResult;
     }
 
     async findAll() {
         const jsonResult = new JsonResult();
         const result = await this.UserMapper.findAndCount();
-        jsonResult.buildTrueRoot(result[0], result[1]);
+        jsonResult.buildTrueList(result[0], result[1]);
         return jsonResult;
     }
 
     async findOne(id: number) {
         const jsonResult = new JsonResult();
-        const result = await this.UserMapper.findOneBy({ id });
+        const result = await this.UserMapper.findOneBy({ userId: id });
+        delete result.userPassword;
         jsonResult.buildTureObject(result);
         return jsonResult;
     }
 
     async update(id: number, updateUserDto: UpdateUserDto) {
         const jsonResult = new JsonResult();
-        const result = await this.UserMapper.update(id,updateUserDto);
+        const result = await this.UserMapper.update(id, updateUserDto);
         jsonResult.buildTureObject(result);
         return jsonResult;
     }
 
     async remove(id: number) {
-      const jsonResult = new JsonResult();
-      const result = await this.UserMapper.delete(id);
-      jsonResult.buildTureObject(result);
-      return jsonResult;
+        const jsonResult = new JsonResult();
+        const result = await this.UserMapper.delete(id);
+        jsonResult.buildTureObject(result);
+        return jsonResult;
     }
 }

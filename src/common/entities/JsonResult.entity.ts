@@ -1,47 +1,49 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { RequestEnum } from '../enum/RequestEnum.enum';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { RequestCodeEnum } from '../enum/RequestCodeEnum.enum';
+import { RequestMessageEnum } from '../enum/RequestMessageEnum.enum';
 
 export class JsonResult<T> {
-    @ApiProperty({ description: '请求是否成功', example: 'chenyx' })
+    @ApiProperty({ description: '请求是否成功', example: true })
     success: boolean;
 
-    @ApiProperty({ description: '错误码', required: false, example: '10001' })
-    tip: RequestEnum;
+    @ApiPropertyOptional({
+        enum: RequestCodeEnum,
+        description: '错误码',
+        example: RequestCodeEnum.REQUEST_ERROR_NO_LOGIN
+    })
+    code: RequestCodeEnum;
 
-    @ApiProperty({
+    @ApiPropertyOptional({
+        description: '返回的消息',
+        example: '这是一个成功的消息！'
+    })
+    message: string;
+
+    @ApiPropertyOptional({
+        enum: RequestMessageEnum,
         description: '维护人员看到的错误原因',
-        required: false,
-        example: '维护人员看到的错误原因'
+        example: RequestMessageEnum.REQUEST_ERROR_NO_LOGIN
     })
-    failReason: string;
+    failReason: RequestMessageEnum;
 
-    @ApiProperty({
-        description: '客户显示的错误原因',
-        required: false,
-        example: '客户显示的错误原因'
-    })
-    failReasonShow: string;
-
-    @ApiProperty({
-        description: '集合类型',
-        required: false,
+    @ApiPropertyOptional({
+        description: '列表类型',
+        type: Array,
         example: [
             { name: 1, age: 13 },
             { name: 2, age: 12 }
         ]
     })
-    root: T[];
+    data: T[];
 
-    @ApiProperty({
+    @ApiPropertyOptional({
         description: '返回的记录总数',
-        required: false,
         example: 2
     })
     totalSize: number;
 
-    @ApiProperty({
+    @ApiPropertyOptional({
         description: '对象类型',
-        required: false,
         example: { name: 1, age: 12 }
     })
     object: T;
@@ -54,9 +56,20 @@ export class JsonResult<T> {
         this.object = object;
     }
 
-    buildTrueRoot(root: T[], totalSize: number) {
+    buildTrueList(data: T[], totalSize: number) {
         this.success = true;
-        this.root = root;
+        this.data = data;
         this.totalSize = totalSize;
+    }
+
+    buildFail(
+        code: RequestCodeEnum,
+        failReason: RequestMessageEnum,
+        message: string
+    ) {
+        this.success = false;
+        this.message = message;
+        this.code = code;
+        this.failReason = failReason;
     }
 }

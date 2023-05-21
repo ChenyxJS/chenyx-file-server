@@ -2,34 +2,45 @@
  * @Author: chenyx
  * @Date: 2023-05-06 16:00:46
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-16 10:44:38
- * @FilePath: /chenyx-file-server/src/common/common.controller.ts
+ * @LastEditTime: 2023-05-21 21:31:05
+ * @FilePath: /chenyx-file-server/src/common/upload.controller.ts
  */
 import {
     Controller,
     Post,
     Body,
     UseInterceptors,
-    UploadedFile
+    UploadedFile,
+    Res
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import fse = require('fs-extra');
 import { FileInterceptor } from '@nestjs/platform-express';
 
-@Controller('common')
-@ApiTags('工具模块接口')
-export class CommonController {
 
-    @Post('upload')
-    @ApiOperation({summary:'文件上传',description:'单文件上传'})
-    @ApiBody({})
+@Controller('upload')
+@ApiTags('文件上传模块接口')
+export class UploadController {
+
+    @Post('simpleChunck')
+    @ApiOperation({ summary: '单文件分片上传' })
+    @ApiParam({ name: 'file', type: '__file' })
     @UseInterceptors(FileInterceptor('file'))
-    upload(@UploadedFile() file: Express.Multer.File) {
+    simpleChunck(@UploadedFile() file: Express.Multer.File) {
         return file;
     }
 
+    @Post('simpleUpload')
+    @ApiOperation({ summary: '单文件分片上传' })
+    @ApiParam({ name: 'file', type: '__file' })
+    @UseInterceptors(FileInterceptor('file'))
+    simpleUpload(@UploadedFile() file: Express.Multer.File) {
+        const savePath = file.path
+        return `http://localhost:7171/${savePath}`;
+    }
+
     @Post('merge')
-    @ApiOperation({summary:'文件合并',description:'分片文件合并'})
+    @ApiOperation({ summary: '分片文件合并' })
     @ApiBody({})
     async merge(@Body() data: any) {
         const fileName = data.fileName;

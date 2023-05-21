@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-16 11:51:16
+ * @LastEditTime: 2023-05-21 21:05:38
  * @FilePath: /chenyx-file-server/src/app.module.ts
  */
 import { Module } from '@nestjs/common';
@@ -10,8 +10,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommonController } from './common/common.controller';
+import { UploadController } from './common/upload.controller';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import config from './config/index.config';
 
 @Module({
     imports: [
@@ -28,10 +31,16 @@ import { UserModule } from './user/user.module';
             // 是否自动加载实体
             autoLoadEntities: true
         }),
+        ConfigModule.forRoot({
+            //全局模块
+            isGlobal: true,
+            load: config
+        }),
         CommonModule,
-        UserModule
+        UserModule,
+        AuthModule,
     ],
-    controllers: [AppController, CommonController],
+    controllers: [AppController, UploadController],
     providers: [AppService]
 })
 export class AppModule {}
