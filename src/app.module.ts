@@ -14,6 +14,7 @@ import { UploadController } from './common/upload.controller';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { SoftModule } from './soft/soft.module';
 import config from './config/index.config';
 
 @Module({
@@ -39,6 +40,7 @@ import config from './config/index.config';
         CommonModule,
         UserModule,
         AuthModule,
+        SoftModule,
     ],
     controllers: [AppController, UploadController],
     providers: [AppService]

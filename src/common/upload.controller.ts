@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-06 16:00:46
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-21 21:31:05
+ * @LastEditTime: 2023-05-22 17:26:17
  * @FilePath: /chenyx-file-server/src/common/upload.controller.ts
  */
 import {
@@ -10,17 +10,17 @@ import {
     Post,
     Body,
     UseInterceptors,
-    UploadedFile,
-    Res
+    UploadedFile
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import fse = require('fs-extra');
 import { FileInterceptor } from '@nestjs/platform-express';
-
+import { ConfigService } from '@nestjs/config';
 
 @Controller('upload')
 @ApiTags('文件上传模块接口')
 export class UploadController {
+    constructor(private readonly config: ConfigService) {}
 
     @Post('simpleChunck')
     @ApiOperation({ summary: '单文件分片上传' })
@@ -31,12 +31,13 @@ export class UploadController {
     }
 
     @Post('simpleUpload')
-    @ApiOperation({ summary: '单文件分片上传' })
+    @ApiOperation({ summary: '单文件上传' })
     @ApiParam({ name: 'file', type: '__file' })
     @UseInterceptors(FileInterceptor('file'))
     simpleUpload(@UploadedFile() file: Express.Multer.File) {
-        const savePath = file.path
-        return `http://localhost:7171/${savePath}`;
+        const uploadUrl = this.config.get('upload_url');
+        const savePath = file.path;
+        return `${uploadUrl}/${savePath}`;
     }
 
     @Post('merge')
@@ -68,6 +69,7 @@ export class UploadController {
             });
         // 删除零时文件夹
         fse.removeSync(chunkDir);
-        return `http://localhost:7171/${savePath}`;
+        const uploadUrl = this.config.get('upload_url');
+        return `${uploadUrl}/${savePath}`;
     }
 }
