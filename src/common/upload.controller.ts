@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-06 16:00:46
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-22 17:26:17
+ * @LastEditTime: 2023-05-22 17:41:09
  * @FilePath: /chenyx-file-server/src/common/upload.controller.ts
  */
 import {
@@ -12,7 +12,7 @@ import {
     UseInterceptors,
     UploadedFile
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import fse = require('fs-extra');
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
@@ -24,7 +24,6 @@ export class UploadController {
 
     @Post('simpleChunck')
     @ApiOperation({ summary: '单文件分片上传' })
-    @ApiParam({ name: 'file', type: '__file' })
     @UseInterceptors(FileInterceptor('file'))
     simpleChunck(@UploadedFile() file: Express.Multer.File) {
         return file;
@@ -32,7 +31,6 @@ export class UploadController {
 
     @Post('simpleUpload')
     @ApiOperation({ summary: '单文件上传' })
-    @ApiParam({ name: 'file', type: '__file' })
     @UseInterceptors(FileInterceptor('file'))
     simpleUpload(@UploadedFile() file: Express.Multer.File) {
         const uploadUrl = this.config.get('upload_url');
