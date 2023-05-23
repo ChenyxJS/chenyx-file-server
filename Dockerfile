@@ -12,4 +12,4 @@ COPY . .
 # 执行npm run build 后生成dist目录
 RUN npm run build
 # 使用打包后的镜像
-CMD node dist/main
+CMD npm run start:prod
