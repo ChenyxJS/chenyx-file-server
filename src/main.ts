@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 18:22:47
+ * @LastEditTime: 2023-05-23 20:29:23
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -35,6 +35,9 @@ async function bootstrap() {
     app.useStaticAssets('static', { prefix: '/static' });
 
     // 监听端口
-    await app.listen(8080);
+    const PORT = process.env.PORT || 8080;
+    await app.listen(PORT, () => {
+        console.log(`服务已经启动${PORT}`);
+    });
 }
 bootstrap();

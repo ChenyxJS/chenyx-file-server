@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 19:04:02
+ * @LastEditTime: 2023-05-23 20:26:54
  * @FilePath: /chenyx-file-server/src/app.module.ts
  */
 import { Module } from '@nestjs/common';
@@ -16,6 +16,16 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { SoftModule } from './soft/soft.module';
 import config from './config/index.config';
+
+// 环境变量加载
+const envFilePath = ['.env.developement'];
+if (process.env.NODE_ENV) {
+    console.log(
+        '🚀 ~ file: app.module.ts:23 ~ process.env.NODE_ENV:',
+        process.env.NODE_ENV
+    );
+    envFilePath.unshift(`.env.${process.env.NODE_ENV}`);
+}
 
 @Module({
     imports: [
@@ -35,12 +45,13 @@ import config from './config/index.config';
         ConfigModule.forRoot({
             //全局模块
             isGlobal: true,
-            load: config
+            load: config,
+            envFilePath
         }),
         CommonModule,
         UserModule,
         AuthModule,
-        SoftModule,
+        SoftModule
     ],
     controllers: [AppController, UploadController],
     providers: [AppService]

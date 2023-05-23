@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-06 16:00:46
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 02:26:08
+ * @LastEditTime: 2023-05-23 20:23:27
  * @FilePath: /chenyx-file-server/src/common/upload.controller.ts
  */
 import {
@@ -34,6 +34,7 @@ export class UploadController {
     @UseInterceptors(FileInterceptor('file'))
     simpleUpload(@UploadedFile() file: Express.Multer.File) {
         const uploadUrl = this.config.get('upload_url');
+        console.log("🚀 ~ file: upload.controller.ts:37 ~ UploadController ~ simpleUpload ~ uploadUrl:", uploadUrl)
         const savePath = file.path;
         return `${uploadUrl}/${savePath}`;
     }
