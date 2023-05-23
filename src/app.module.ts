@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 18:44:28
+ * @LastEditTime: 2023-05-23 19:04:02
  * @FilePath: /chenyx-file-server/src/app.module.ts
  */
 import { Module } from '@nestjs/common';
@@ -26,7 +26,7 @@ import config from './config/index.config';
             port: 3306,
             username: 'file-server',
             password: '12345678',
-            database: 'file_server',
+            database: 'file-server',
             // 是否同步实体
             synchronize: true,
             // 是否自动加载实体
