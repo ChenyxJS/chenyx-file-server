@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 18:17:23
+ * @LastEditTime: 2023-05-23 18:37:10
  * @FilePath: /chenyx-file-server/src/app.module.ts
  */
 import { Module } from '@nestjs/common';
@@ -22,7 +22,7 @@ import config from './config/index.config';
         // 连接数据库
         TypeOrmModule.forRoot({
             type: 'mysql',
-            host: '112.74.62.177',
+            host: 'localhost',
             port: 3306,
             username: 'file-server',
             password: '12345678',
