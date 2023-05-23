@@ -33,7 +33,7 @@ export class UploadController {
     @ApiOperation({ summary: '单文件上传' })
     @UseInterceptors(FileInterceptor('file'))
     simpleUpload(@UploadedFile() file: Express.Multer.File) {
-        const uploadUrl = this.config.get('upload_url');
+        const uploadUrl = this.config.get('app.upload_url');
         console.log("🚀 ~ file: upload.controller.ts:37 ~ UploadController ~ simpleUpload ~ uploadUrl:", uploadUrl)
         const savePath = file.path;
         return `${uploadUrl}/${savePath}`;
