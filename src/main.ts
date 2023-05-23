@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-17 14:03:48
+ * @LastEditTime: 2023-05-23 18:22:47
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -35,6 +35,6 @@ async function bootstrap() {
     app.useStaticAssets('static', { prefix: '/static' });
 
     // 监听端口
-    await app.listen(7171);
+    await app.listen(8081);
 }
 bootstrap();
