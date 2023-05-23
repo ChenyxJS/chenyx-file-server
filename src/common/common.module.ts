@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 16:55:40
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-21 21:05:26
+ * @LastEditTime: 2023-05-23 15:00:16
  * @FilePath: /chenyx-file-server/src/common/common.module.ts
  */
 
@@ -48,7 +48,7 @@ const simpleChunkUpload = MulterModule.registerAsync({
     }
 });
 
-// 分片上传配置
+// 单文件上传配置
 const simpleUpload = MulterModule.registerAsync({
     useFactory() {
         return {

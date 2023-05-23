@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-06 16:00:46
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-22 17:41:09
+ * @LastEditTime: 2023-05-23 02:26:08
  * @FilePath: /chenyx-file-server/src/common/upload.controller.ts
  */
 import {
