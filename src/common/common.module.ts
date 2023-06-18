@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 16:55:40
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-23 15:00:16
+ * @LastEditTime: 2023-06-15 21:56:29
  * @FilePath: /chenyx-file-server/src/common/common.module.ts
  */
 
@@ -19,6 +19,8 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserOpenId } from './entities/UserOpenId.entity';
 import { User } from 'src/user/entities/user.entity';
+import { JuejinUtils } from './utils/JuejinUtils';
+import { JuejinController } from './Juejin.controller';
 
 // 分片上传配置
 const simpleChunkUpload = MulterModule.registerAsync({
@@ -85,8 +87,8 @@ const simpleUpload = MulterModule.registerAsync({
         simpleChunkUpload,
         simpleUpload
     ],
-    controllers: [WxLoginController, configController],
-    providers: [WxUtils],
+    controllers: [WxLoginController, configController,JuejinController],
+    providers: [WxUtils, JuejinUtils],
     exports: [simpleChunkUpload, simpleUpload]
 })
 export class CommonModule {}
