@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { RequestCodeEnum } from '../enum/RequestCodeEnum.enum';
 import { RequestMessageEnum } from '../enum/RequestMessageEnum.enum';
-
 export class JsonResult<T> {
     @ApiProperty({ description: '请求是否成功', example: true })
     success: boolean;
@@ -28,11 +27,6 @@ export class JsonResult<T> {
 
     @ApiPropertyOptional({
         description: '列表类型',
-        type: Array,
-        example: [
-            { name: 1, age: 13 },
-            { name: 2, age: 12 }
-        ]
     })
     data: T[];
 
@@ -50,16 +44,19 @@ export class JsonResult<T> {
 
     buildTure() {
         this.success = true;
+        return this;
     }
     buildTureObject(object: T) {
         this.success = true;
         this.object = object;
+        return this;
     }
 
     buildTrueList(data: T[], totalSize: number) {
         this.success = true;
         this.data = data;
         this.totalSize = totalSize;
+        return this;
     }
 
     buildFail(
@@ -71,5 +68,6 @@ export class JsonResult<T> {
         this.message = message;
         this.code = code;
         this.failReason = failReason;
+        return this;
     }
 }

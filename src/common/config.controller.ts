@@ -13,7 +13,7 @@ export class configController {
     @Get()
     @ApiOperation({
         summary: '获取系统配置',
-        description: '获取app_id和app_secret'
+
     })
     @ApiBearerAuth('jwt')
     async getConfig() {

@@ -1,14 +1,7 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import {
-    ApiBearerAuth,
-    ApiBody,
-    ApiOperation,
-    ApiQuery,
-    ApiTags
-} from '@nestjs/swagger';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { WxUtils } from './utils/WxUtils';
 import { JsonResult } from './entities/JsonResult.entity';
-import { WxInfoQuery } from './query/WxInfo.query';
 import { RequestCodeEnum } from './enum/RequestCodeEnum.enum';
 import { RequestMessageEnum } from './enum/RequestMessageEnum.enum';
 
@@ -41,22 +34,6 @@ export class WxLoginController {
                 '未授权'
             );
         }
-        return jsonResult;
-    }
-
-    @Get()
-    @ApiOperation({
-        summary: '获取用户信息',
-        description: 'code和openId换取用户信息'
-    })
-    @ApiQuery({ type: WxInfoQuery, description: '微信参数' })
-    @ApiBearerAuth('jwt')
-    async getUserInfo(@Query() query: { code; openId }) {
-        const jsonResult = new JsonResult();
-        const result = await this.wxUtils.getWxUserInfo(query);
-        jsonResult.buildTureObject({
-            result
-        });
         return jsonResult;
     }
 }

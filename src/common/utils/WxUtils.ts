@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserOpenId } from '../entities/UserOpenId.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/system/user/user.entity';
 import * as argon2 from 'argon2';
 import { Platform } from '../enum/Platform.enum';
 
@@ -101,28 +101,7 @@ export class WxUtils {
                     token = '';
                 }
             }
-
             return token;
         }
-    }
-
-    async getWxUserInfo(params: { code: string; openId: string }) {
-        // 请求微信服务端接口 返回用户信息
-        const wxUserInfoParams = {
-            access_token: params.code,
-            openid: params.openId,
-            lang: 'zh_CN'
-        };
-        const wxUserInfo = await firstValueFrom(
-            this.httpService
-                .get(
-                    'https://api.weixin.qq.com/wxa/getpluginopenpid?access_token=ACCESS_TOKEN',
-                    {
-                        params: wxUserInfoParams
-                    }
-                )
-                .pipe(map(response => response.data))
-        );
-        console.log(wxUserInfo);
     }
 }
