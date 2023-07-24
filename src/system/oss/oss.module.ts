@@ -19,7 +19,9 @@ const simpleChunkUpload = MulterModule.registerAsync({
                 destination: (_, file, callback) => {
                     // 先将分片文件保存在临时目录中
                     const fname = file.originalname.split('.')[0];
-                    const chunkDir = `${config.get('upload.location')}/${fname}`;
+                    const chunkDir = `${config.get(
+                        'upload.location'
+                    )}/${fname}`;
                     // 判断该文件夹是否存在
                     if (!fse.existsSync(chunkDir)) {
                         // 不存在则创建改目录
@@ -47,8 +49,11 @@ const simpleUpload = MulterModule.registerAsync({
             storage: diskStorage({
                 //文件储存位置
                 destination: (_, file, callback) => {
-                    const fext = file.originalname.split('.')[1];
-                    const uploadDir = `${config.get('upload.location')}/${fext}`;
+                    const originalnameArr = file.originalname.split('.');
+                    const fext = originalnameArr[originalnameArr.length - 1];
+                    const uploadDir = `${config.get(
+                        'upload.location'
+                    )}/${fext}`;
                     // 判断该文件夹是否存在
                     if (!fse.existsSync(uploadDir)) {
                         // 不存在则创建改目录

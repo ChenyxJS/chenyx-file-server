@@ -20,7 +20,11 @@ export class OssService {
     async create(files) {
         const jsonResult = new JsonResult();
         const ossList = files.map(file => {
-            const url = `${this.config.get('upload.www')}/${this.config.get('upload.location')}/${file.filename}`;
+            // 重命名， multer 上传的文件没有后缀名，在这重命名加上后缀名
+            const originalnameArr = file.originalname.split('.');
+            const url = `${this.config.get('upload.www')}/${this.config.get(
+                'upload.location'
+            )}/${originalnameArr[originalnameArr.length - 1]}/${file.filename}`;
             return new CreateOssDto(
                 url,
                 file.mimetype,
