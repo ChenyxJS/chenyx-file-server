@@ -77,13 +77,14 @@ export class OssController {
         const fname = fileName.split('.')[0];
         // 获取文件拓展名
         const fext = fileName.split('.')[1];
+        const location = this.config.get('upload.location')
         // 按照拓展名分类文件
-        if (!fse.existsSync(`static/${fext}`)) {
-            fse.mkdirsSync(`static/${fext}`);
+        if (!fse.existsSync(`${location}/${fext}`)) {
+            fse.mkdirsSync(`${location}/${fext}`);
         }
-        const savePath = `static/${fext}/${fileName}`;
+        const savePath = `${location}/${fext}/${fileName}`;
         // 根据文件名获取对应文件夹下的分片列表
-        const chunkDir = `static/${fname}`;
+        const chunkDir = `${location}/${fname}`;
         const chunks = await fse.readdir(chunkDir);
         // 安装index排序
         chunks
