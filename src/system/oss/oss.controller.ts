@@ -19,7 +19,6 @@ import fse = require('fs-extra');
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 
-
 @ApiBearerAuth()
 @ApiTags('文件管理')
 @Controller('oss')
@@ -36,6 +35,14 @@ export class OssController {
     @UseInterceptors(FileInterceptor('file'))
     async uploadFile(@UploadedFile() file) {
         return this.ossService.create([file]);
+    }
+
+    @Post('upload/chunk')
+    @HttpCode(200)
+    @ApiOperation({ summary: '文件上传，接收 multipart/form-data 的数据' })
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadChunkFile(@UploadedFile() file) {
+        return file;
     }
 
     @Post('upload/mult')
@@ -76,7 +83,7 @@ export class OssController {
         }
         const savePath = `static/${fext}/${fileName}`;
         // 根据文件名获取对应文件夹下的分片列表
-        const chunkDir = `uploads/${fname}`;
+        const chunkDir = `static/${fname}`;
         const chunks = await fse.readdir(chunkDir);
         // 安装index排序
         chunks
@@ -90,7 +97,16 @@ export class OssController {
             });
         // 删除零时文件夹
         fse.removeSync(chunkDir);
-        const uploadUrl = this.config.get('upload_url');
-        return `${uploadUrl}/${savePath}`;
+        // create a new Express.Multer.File
+        const file = {
+            filename: fileName,
+            originalname: fileName,
+            encoding: '',
+            mimetype: '',
+            buffer: fse.readFileSync(savePath),
+            size: fse.statSync(savePath).size,
+            path: savePath
+        } as Express.Multer.File;
+        return this.ossService.create([file]);
     }
 }

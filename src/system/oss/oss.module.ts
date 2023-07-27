@@ -17,6 +17,7 @@ const simpleChunkUpload = MulterModule.registerAsync({
             storage: diskStorage({
                 //文件储存位置
                 destination: (_, file, callback) => {
+                    console.log(file.size);
                     // 先将分片文件保存在临时目录中
                     const fname = file.originalname.split('.')[0];
                     const chunkDir = `${config.get(
@@ -32,7 +33,7 @@ const simpleChunkUpload = MulterModule.registerAsync({
                 },
                 //文件名定制
                 filename: (_, file, callback) => {
-                    const path = file.originalname.split('.')[1];
+                    const path = file.originalname.split('.')[1]; 
                     callback(null, path);
                 }
             })
@@ -76,7 +77,7 @@ const simpleUpload = MulterModule.registerAsync({
     imports: [
         TypeOrmModule.forFeature([OssEntity]),
         simpleChunkUpload,
-        simpleUpload
+        // simpleUpload
     ],
     providers: [OssService],
     controllers: [OssController]

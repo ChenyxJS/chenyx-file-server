@@ -17,9 +17,10 @@ export class OssService {
         private readonly config: ConfigService
     ) {}
     // 将上传文件的信息入库
-    async create(files) {
+    async create(files: Express.Multer.File[]) {
         const jsonResult = new JsonResult();
-        const ossList = files.map(file => {
+        const ossList = files.map((file: { originalname: string; filename: any; mimetype: any; path: any; size: any; }) => {
+            console.log(file);
             // 重命名， multer 上传的文件没有后缀名，在这重命名加上后缀名
             const originalnameArr = file.originalname.split('.');
             const url = `${this.config.get('upload.www')}/${this.config.get(
@@ -28,7 +29,7 @@ export class OssService {
             return new CreateOssDto(
                 url,
                 file.mimetype,
-                `${file.path}`,
+                file.path,
                 file.size,
                 file.originalname
             );
@@ -41,7 +42,7 @@ export class OssService {
                 '上传失败'
             );
         }
-        const data = result.map(v => v.ossUrl);
+        const data = result.map((v: { ossUrl: any; }) => v.ossUrl);
         return jsonResult.buildTureObject(files.length > 1 ? data : data[0]);
     }
 
@@ -49,8 +50,9 @@ export class OssService {
     async delete(id: number) {
         const jsonResult = new JsonResult();
         const file = await this.ossRepository.findOneBy({ ossId: id });
+        console.log(file['ossLocation']);
         try {
-            fs.unlinkSync(file['location']);
+            fs.unlinkSync(file['ossLocation']);
         } catch (error) {
             return { statusCode: 500, message: '删除失败' };
         }

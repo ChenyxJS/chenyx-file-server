@@ -4,7 +4,7 @@ import {
     Column,
     Entity
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform, TransformFnParams } from 'class-transformer';
 
 @Entity('oss')
 export class OssEntity {
@@ -20,7 +20,7 @@ export class OssEntity {
     @Column({ type: 'int', comment: '文件大小 size' })
     public ossSize: number;
 
-    @Column({ type: 'varchar', length: 20, comment: '文件 mimetype 类型' })
+    @Column({ type: 'varchar', length: 100, comment: '文件 mimetype 类型' })
     public ossType: string;
 
     @Exclude({ toPlainOnly: true }) // 输出屏蔽
@@ -34,3 +34,5 @@ export class OssEntity {
     @CreateDateColumn({ type: 'timestamp', comment: '创建时间' })
     ossCreateDate: Date;
 }
+
+
