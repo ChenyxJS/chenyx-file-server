@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-07-20 10:29:58
+ * @LastEditTime: 2023-08-01 18:38:08
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -19,7 +19,7 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 
 async function bootstrap() {
-    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule,{ cors: true });
 
     // 表单验证
     app.useGlobalPipes(new ValidationPipe());
