@@ -2,7 +2,7 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-08-01 22:34:46
+ * @LastEditTime: 2023-08-01 22:43:20
  * @FilePath: /chenyx-file-server/src/main.ts
  */
 import { NestFactory } from '@nestjs/core';
@@ -25,7 +25,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
 
     // 静态资源访问
-    app.useStaticAssets('/www/oss/static', { prefix: '/static' });
+    app.useStaticAssets('/www/oss', { prefix: '/static' });
 
     // 访问频率限制
     app.use(
