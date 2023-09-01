@@ -2,13 +2,12 @@
  * @Author: chenyx
  * @Date: 2023-05-02 15:22:17
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-07-18 11:44:30
+ * @LastEditTime: 2023-09-01 14:38:05
  * @FilePath: /chenyx-file-server/src/app.module.ts
  */
 import { Module } from '@nestjs/common';
 import { CommonModule } from './common/common.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UploadController } from './common/upload.controller';
 import { UserModule } from './system/user/user.module';
 import { AuthModule } from './system/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -41,6 +40,6 @@ if (process.env.NODE_ENV) {
         AuthModule,
         OssModule
     ],
-    controllers: [UploadController]
+    controllers: []
 })
 export class AppModule {}

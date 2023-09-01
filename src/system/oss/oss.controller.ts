@@ -20,7 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 
 @ApiBearerAuth()
-@ApiTags('文件管理')
+@ApiTags('文件管理') 
 @Controller('oss')
 // @UseGuards(AuthGuard('jwt'))
 export class OssController {
@@ -34,7 +34,43 @@ export class OssController {
     @ApiOperation({ summary: '文件上传，接收 multipart/form-data 的数据' })
     @UseInterceptors(FileInterceptor('file'))
     async uploadFile(@UploadedFile() file) {
-        return this.ossService.create([file]);
+        const fileName = file.originalname;
+        // 获取文件名
+        const fname = fileName.split('.')[0];
+        // 获取文件拓展名
+        const fext = fileName.split('.')[1];
+        const location = this.config.get('upload.location')
+        // 按照拓展名分类文件
+        if (!fse.existsSync(`${location}/${fext}`)) {
+            fse.mkdirsSync(`${location}/${fext}`);
+        }
+        const savePath = `${location}/${fext}/${fileName}`;
+        // 根据文件名获取对应文件夹下的分片列表
+        const chunkDir = `${location}/${fname}`;
+        const chunks = await fse.readdir(chunkDir);
+        // 安装index排序
+        chunks
+            .sort((a: any, b: any) => a - b)
+            .map((chunkPath: string) => {
+                // 将所有分片合并
+                fse.appendFileSync(
+                    savePath,
+                    fse.readFileSync(`${chunkDir}/${chunkPath}`)
+                );
+            });
+        // 删除零时文件夹
+        fse.removeSync(chunkDir);
+        // create a new Express.Multer.File
+        const saveFile = {
+            filename: fileName,
+            originalname: fileName,
+            encoding: '',
+            mimetype: '',
+            buffer: fse.readFileSync(savePath),
+            size: fse.statSync(savePath).size,
+            path: savePath
+        } as Express.Multer.File;
+        return this.ossService.create([saveFile]);
     }
 
     @Post('upload/chunk')

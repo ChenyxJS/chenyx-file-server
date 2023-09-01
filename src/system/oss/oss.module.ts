@@ -17,7 +17,6 @@ const simpleChunkUpload = MulterModule.registerAsync({
             storage: diskStorage({
                 //文件储存位置
                 destination: (_, file, callback) => {
-                    console.log(file.size);
                     // 先将分片文件保存在临时目录中
                     const fname = file.originalname.split('.')[0];
                     const chunkDir = `${config.get(
