@@ -34,7 +34,8 @@ export class OssController {
     @ApiOperation({ summary: '文件上传，接收 multipart/form-data 的数据' })
     @UseInterceptors(FileInterceptor('file'))
     async uploadFile(@UploadedFile() file) {
-        const fileName = file.originalname;
+        console.log("🚀 ~ file: oss.controller.ts:37 ~ OssController ~ uploadFile ~ file:", file)
+        const fileName = file.filename;
         // 获取文件名
         const fname = fileName.split('.')[0];
         // 获取文件拓展名
@@ -46,7 +47,7 @@ export class OssController {
         }
         const savePath = `${location}/${fext}/${fileName}`;
         // 根据文件名获取对应文件夹下的分片列表
-        const chunkDir = `${location}/${fname}`;
+        const chunkDir = file.destination;
         const chunks = await fse.readdir(chunkDir);
         // 安装index排序
         chunks

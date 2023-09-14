@@ -7,7 +7,6 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { diskStorage } from 'multer';
 import fse = require('fs-extra');
-import { Random } from 'mockjs';
 
 // 分片上传配置
 const simpleChunkUpload = MulterModule.registerAsync({
@@ -34,11 +33,11 @@ const simpleChunkUpload = MulterModule.registerAsync({
                 },
                 //文件名定制
                 filename: (_, file, callback) => {
-                    const path =
+                    const filename =
                         String(new Date().getTime()) +
-                        Math.floor((Math.random()*10)+1) +
-                        file.originalname.split('.')[1];
-                    callback(null, path);
+                        Math.floor(Math.random() * 10 + 1) +
+                        file.originalname;
+                    callback(null, filename);
                 }
             })
         };
