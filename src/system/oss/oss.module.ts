@@ -36,7 +36,7 @@ const simpleChunkUpload = MulterModule.registerAsync({
                 filename: (_, file, callback) => {
                     const path =
                         String(new Date().getTime()) +
-                        Random.id.toString() +
+                        Math.floor((Math.random()*10)+1) +
                         file.originalname.split('.')[1];
                     callback(null, path);
                 }
