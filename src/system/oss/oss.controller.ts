@@ -118,6 +118,7 @@ export class OssController {
         if (!fse.existsSync(`${location}/${fext}`)) {
             fse.mkdirsSync(`${location}/${fext}`);
         }
+        // 拼接分片文件保存的路径
         const savePath = `${location}/${fext}/${fileName}`;
         // 根据文件名获取对应文件夹下的分片列表
         const chunkDir = `${location}/${fname}`;
