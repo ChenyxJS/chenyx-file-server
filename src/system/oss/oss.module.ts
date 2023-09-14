@@ -18,10 +18,7 @@ const simpleChunkUpload = MulterModule.registerAsync({
             storage: diskStorage({
                 //文件储存位置
                 destination: (_, file, callback) => {
-                    const originalname =
-                        String(new Date().getTime()) +
-                        Random.id +
-                        file.originalname;
+                    const originalname = file.originalname;
                     // 先将分片文件保存在临时目录中
                     const fname = originalname.split('.')[0];
                     const chunkDir = `${config.get(
@@ -37,7 +34,10 @@ const simpleChunkUpload = MulterModule.registerAsync({
                 },
                 //文件名定制
                 filename: (_, file, callback) => {
-                    const path = file.originalname.split('.')[1];
+                    const path =
+                        String(new Date().getTime()) +
+                        Random.id +
+                        file.originalname.split('.')[1];
                     callback(null, path);
                 }
             })
